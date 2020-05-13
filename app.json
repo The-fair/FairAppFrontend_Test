@@ -1,0 +1,17 @@
+{
+  "name": "FairAppTest",
+  "displayName": "FairAppTest",
+  "expo": {
+    "name": "FairAppTest",
+    "slug": "FairAppTest",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
