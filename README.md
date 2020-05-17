@@ -25,3 +25,6 @@ For Test Usage
 
 	- npm run ios
 	- npm start
+	
+	replace pod 'ReactCommon/jscallinvoker', :path => "../node_modules/react-native/ReactCommon"
+	with pod 'ReactCommon/callinvoker', :path => "../node_modules/react-native/ReactCommon"
