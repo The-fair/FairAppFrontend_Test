@@ -14,16 +14,28 @@ import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 
 // import for text input icon
 import { Icon } from 'react-native-elements';
+import { firebase } from '@react-native-firebase/auth';
+
+// import for navigation
+import {
+    NavigationParams,
+    NavigationScreenProp,
+    NavigationState
+    } from 'react-navigation';
 
 // constants
 const BGIMAGE = require('../assests/images/Temp_BG_Image.jpeg');
 const LOGOIMAGE = require('../assests/images/Temp_Logo_Image.jpeg');
 const { width: WIDTH } = Dimensions.get('window');
 
+interface Props {
+    navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+}
+
 /////////////////////////////////////////////
 // Login screen componenent
 /////////////////////////////////////////////
-class LoginScreen extends Component {
+class LoginScreen extends Component<Props> {
 
     /****************************************
      * called on done loading the screen
@@ -36,10 +48,17 @@ class LoginScreen extends Component {
      * global state of the login screen
      ****************************************/
     state = {
+        // Regular Login Info
         email: '',
         password: '',
         passwordSecured: true,
-        loginMethod: ''
+        loginMethod: '',
+
+        // Google Login Info
+        isLoggedIn: false,
+        user: [],
+        //isSigninInProgress: false,
+
     }
 
     /****************************************
@@ -66,6 +85,7 @@ class LoginScreen extends Component {
                         placeholder={'Email'}
                         placeholderTextColor={'rgba(255, 255, 255, 0.7)'}
                         underlineColorAndroid='transparent'
+                        autoCapitalize = 'none'
 
                         // handler to set the state value on text change
                         onChangeText = {this.handleEmailTextInput}
@@ -112,7 +132,10 @@ class LoginScreen extends Component {
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.signUpButton}
                         onPress={
-                            ()=>alert('sign up button pressed')
+                            this.handleSignUpButtonOnPress
+                            //this.firebaseSignUp
+                            //()=>alert('sign up button pressed')
+                            
                         }
                     >
                         <Text style={styles.submissionBtnText}> Sign Up</Text>
@@ -124,14 +147,12 @@ class LoginScreen extends Component {
                     style={styles.GoogleSigninButton}
                     size={GoogleSigninButton.Size.Wide}
                     color={GoogleSigninButton.Color.Dark}
-                    onPress={this.signIn}
-                    //disabled={this.state.isSigninInProgress} />
-                    disabled={false} />
-
+                    onPress={() => this.googleSignIn}
+                    //onPress={() => this.signInWithGoogleAsync}
+                    //disabled={this.state.isSigninInProgress} 
+                    />
+                    {/*  Google  */}
                 </ImageBackground>
-                
-                
-                    
             </View>
             
         );
@@ -161,24 +182,146 @@ class LoginScreen extends Component {
         this.setState( { password: text } );
     }
 
-    // Google login in function
-    signIn = async () => {
+    /****************************************
+     * Handle the action taken when press the sign uo button
+     ****************************************/
+    handleSignUpButtonOnPress = () => {
+        this.props.navigation.navigate('SignUpScreen');
+    }
+
+    /****************************************
+     * Google login function
+     ****************************************/
+    
+    googleSignIn = async () => {
         try {
+            //await GoogleSignin.hasPlayServices( { showPlayServicesUpdateDialog: true } );
             await GoogleSignin.hasPlayServices();
+            this.setState({ isSigninInProgress: true });
             const userInfo = await GoogleSignin.signIn();
-            this.setState({ userInfo });
+            this.setState({ user: userInfo.user, isLoggedIn: true });
+            console.log(userInfo);
         } catch (error) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                console.log('ERROR: Google Login Cancelled');
                 // user cancelled the login flow
             } else if (error.code === statusCodes.IN_PROGRESS) {
+                console.log('ERROR: Google login In Porgress');
                 // operation (e.g. sign in) is in progress already
             } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                console.log('ERROR: Google Login Not Available');
                 // play services not available or outdated
             } else {
                 // some other error happened
             }
         }
     };
+    
+
+
+    /****************************************
+     * check if the firebase user is the same 
+     * as the google user
+     ****************************************/
+    
+    isEqualUser = ( googleUser: any, firebaseUser: any) => {
+
+        // check if it is firebase
+        if (firebaseUser) {
+
+            var providerData = firebaseUser.providerData;
+
+            // loop the data
+            for ( var i = 0; i < providerData.length; i++ ){
+                if (
+                    providerData[i].providerId === firebase.auth.GoogleAuthProvider.PROVIDER_ID && providerData[i].uid === googleUser.getBasicProfile().getId()
+                ){
+                    // we dont need to reauth the Firebase connection
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    };
+    
+
+    /****************************************
+     * Sign in function
+     ****************************************/
+    /*
+    onSignIn = (googleUser: any) => {
+
+        console.log('Google Auth Response', googleUser);
+
+        // register an Observer on Firebase Auth to make sure auth is initialized
+        var unsubscribe = firebase.auth().onAuthStateChanged(
+            (firebaseUser) => {
+                unsubscribe();
+
+                // check if we are already signed-in firebase with the correct user
+                if(!this.isEqualUser(googleUser, firebaseUser)) {
+                    var credential = firebase.auth.GoogleAuthProvider.credential(
+                        googleUser.idToken,
+                        googleUser.accessToken
+                    );
+
+                    // sign in with credential from the google user
+                    firebase.auth()
+                    .signInWithCredential(credential)
+                    .then((result) => {
+                        console.log('User logged in');
+                        if (result.additionalUserInfo?.isNewUser){
+                            console.log('New user');
+                        }
+                        else{
+                            console.log('Old user');
+                        }
+                    })
+                    .catch((error) => {
+                        // handle error here
+                        var errorCode = error.code;
+                        var errorMessage = error.message;
+                        var email = error.email;
+                        var credential = error.credential;
+                    });
+                }
+                else{
+                    console.log('User already signed in Firebase');
+                }
+            }
+        );
+    };
+    */    
+
+    /****************************************
+     * Sign in with async
+     ****************************************/
+    /*
+    signInWithGoogleAsync = async () => {
+        try {
+            //await GoogleSignin.hasPlayServices( { showPlayServicesUpdateDialog: true } );
+            await GoogleSignin.hasPlayServices();
+            this.setState({ isSigninInProgress: true });
+            const userInfo = await GoogleSignin.signIn();
+            this.setState({ user: userInfo.user, isLoggedIn: true });
+            console.log(userInfo);
+        } 
+        catch(e) {
+            return {
+                error: true
+            };
+        }
+    }
+    */
+
+    /****************************************
+     * check if the firebase user is the same 
+     * as the google user
+     ****************************************/
+    
+
+
 }
 
 // define your styles

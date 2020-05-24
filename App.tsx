@@ -7,15 +7,22 @@ import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 import LoginScreen from './screens/LoginScreen';
 import LoadingScreen from './screens/LoadingScreen';
 import DashboardScreen from './screens/DashboardScreen';
+import SignUpScreen from './screens/SignUpScreen';
 
 
 
-const AppSwitchNavigator = createSwitchNavigator({
-    LoadingScreen:LoadingScreen,
-    LoginScreen:LoginScreen,
-    DashboardScreen:DashboardScreen
+const AppSwitchNavigator = createSwitchNavigator(
+    {
+        LoadingScreen:LoadingScreen,
+        LoginScreen:LoginScreen,
+        DashboardScreen:DashboardScreen,
+        SignUpScreen:SignUpScreen,
+    },
+    {
+        initialRouteName: 'LoadingScreen'
+    }
 
-});
+);
 
 // create a component
 class App extends Component {
