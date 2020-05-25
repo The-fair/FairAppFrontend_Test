@@ -1,10 +1,9 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TabBarIOS } from 'react-native';
 
 // import for firebase componenet
 import auth from '@react-native-firebase/auth';
-
 
 // import for navigation
 import {
@@ -27,6 +26,9 @@ import TempScreen_1 from './home_subscreens/TempScreen_1';
 import TempScreen_2 from './home_subscreens/TempScreen_2';
 import VendorProfileScreen from './home_subscreens/VendorProfileScreen';
 
+// import for text input icon
+import { Icon } from 'react-native-elements';
+
 // enable screen
 import { enableScreens } from 'react-native-screens';
 enableScreens();
@@ -40,7 +42,24 @@ class HomeScreenTabNavigator extends Component {
     render() {
         return (
             //<NavigationContainer>
-                <TabBarItem.Navigator initialRouteName='HomeScreen'>
+                <TabBarItem.Navigator 
+                    initialRouteName='HomeScreen'
+                    screenOptions={({ route}) => ({
+                        tabBarIcon: ({ focused, color, size}) => {
+                            let iconName = 'access-point';
+                            if (route.name === 'Profile'){
+                                iconName = focused ? 'account'
+                                : 'account-outline';
+                            }
+                            else if (route.name === 'Calendar'){
+                                iconName = focused ? 'calendar' : 'calendar-check';
+                            }
+
+                            return <Icon type='material-community' name={iconName} size={size} color={color} />;
+                        },
+                    })}
+                >
+                    
                     <TabBarItem.Screen name="HomeScreen" component={HomeScreen} />
                     <TabBarItem.Screen name="Calendar" component={CalendarScreen} />
                     <TabBarItem.Screen name="TempScreen_1" component={TempScreen_1} />
