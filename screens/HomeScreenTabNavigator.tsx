@@ -42,6 +42,7 @@ class HomeScreenTabNavigator extends Component {
     render() {
         return (
             //<NavigationContainer>
+                // customized tab bar item
                 <TabBarItem.Navigator 
                     initialRouteName='HomeScreen'
                     screenOptions={({ route}) => ({
@@ -60,6 +61,7 @@ class HomeScreenTabNavigator extends Component {
                     })}
                 >
                     
+                    {/* List the navigation stack */}
                     <TabBarItem.Screen name="HomeScreen" component={HomeScreen} />
                     <TabBarItem.Screen name="Calendar" component={CalendarScreen} />
                     <TabBarItem.Screen name="TempScreen_1" component={TempScreen_1} />
