@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 
 // import from firebase
-import { firebase } from '@react-native-firebase/auth';
+import auth from '@react-native-firebase/auth';
 
 // import for navigation
 import {
@@ -31,7 +31,7 @@ class SignUpScreen extends Component<Props> {
         password: '',
         passwordSecured: true,
         loginMethod: '',
-        errorMessage: '',
+        errorMessage: null,
 
         // Google Login Info
         isLoggedIn: false,
@@ -43,19 +43,21 @@ class SignUpScreen extends Component<Props> {
     /****************************************
      * handle sign up
      ****************************************/
-    handleSignUp = () => {
+    /*
+    handleSignUp = async() => {
         // construct a variable
         const { email, password } = this.state
+        console.log(email)
+        console.log(password)
 
         // firebase sign up 
-        firebase
-        .auth()
+        auth()
         .createUserWithEmailAndPassword(email, password)
+        .then(auth().signOut)
         .then(user => this.props.navigation.navigate('DashboardScreen'))
-        .catch(error => this.setState({
-            errorMessage: error.message
-        }))
+        .catch(error => console.log(error))
     }
+    */
 
     render() {
         return (
@@ -63,42 +65,46 @@ class SignUpScreen extends Component<Props> {
                 <Text>Sign Up</Text>
 
                 {/*  Check if there is error message  */}
-                {this.state.errorMessage && 
-                    <Text style={{ color: 'red' }}>
-                        {this.state.errorMessage}
-                    </Text>}
 
-                {/*  Password Input  */}
+
+                {/*  Email Input  */}
                 <TextInput
                     placeholder='Email'
                     autoCapitalize='none'
                     style={styles.emailTextInput}
-                    onChangeText={email => this.setState({
-                        email
-                    })}
+                    onChangeText = {this.handleEmailTextInput}
                     value={this.state.email}
                 />
 
+                {/*  Password Input  */}
                 <TextInput
                     secureTextEntry
-                    placeholderTextColor='Password'
+                    placeholder='Password'
                     autoCapitalize='none'
                     style={styles.passwordTextInput}
-                    onChangeText={password => this.setState({
-                        password
-                    })}
+                    onChangeText = {this.handlePasswordTextInput}
                     value={this.state.password}
                 />
 
-                
+                {/*  Sign Up Button Pressed  */}                
                 <TouchableOpacity style={styles.signUpBtn}  
                         // function to call on press 
-                        onPress={() =>{
-                            this.handleSignUp;
-                        }}
+                        onPress={ this.firebaseSignUp }
                     >
                         <Text>
                             Sign Up
+                        </Text>
+                </TouchableOpacity>
+
+                {/*  Login In Button Pressed  */}   
+                <TouchableOpacity style={styles.signUpBtn}  
+                        // function to call on press 
+                        onPress={() =>{
+                            this.props.navigation.navigate('LoginScreen');
+                        }}
+                    >
+                        <Text>
+                            Already have an account? Login
                         </Text>
                 </TouchableOpacity>
                 
@@ -109,16 +115,35 @@ class SignUpScreen extends Component<Props> {
     /****************************************
      * Firebase login function
      ****************************************/
-    firebaseSignUp = async() => {
-        firebase
-        .auth()
+    firebaseSignUp = () => {
+
+        console.log('hi')
+
+        console.log(this.state.email)
+        console.log(this.state.password)
+
+        auth()
         .createUserWithEmailAndPassword(this.state.email, this.state.password)
-        .then(() => this.props.navigation.navigate('DashboardScreen'))
+        .then(() => this.props.navigation.navigate('HomeScreenTabNavigator'))
         .catch(error => this.setState(
             {
                 errorMessage: error.message
             }
         ))
+    }
+
+    /****************************************
+     * Handle text change in email text input
+     ****************************************/
+    handleEmailTextInput = (text: string) => {
+        this.setState( { email: text } );
+    }
+
+    /****************************************
+     * Handle text change in password text input
+     ****************************************/
+    handlePasswordTextInput = (text: string) => {
+        this.setState( { password: text } );
     }
 
 }
@@ -129,6 +154,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        flexDirection: 'column',
         //backgroundColor: '#2c3e50',
     },
 
