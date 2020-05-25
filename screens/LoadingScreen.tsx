@@ -39,7 +39,7 @@ class LoadingScreen extends Component<Props> {
        auth().onAuthStateChanged((user) => {
            console.log("AUTH STATE CHANGED CALLED");
            if (user){
-               this.props.navigation.navigate('DashboardScreen');
+               this.props.navigation.navigate('HomeScreenTabNavigator', {email: user.email});
            }
            else{
                this.props.navigation.navigate('LoginScreen');
@@ -60,7 +60,7 @@ class LoadingScreen extends Component<Props> {
      * check if the firebase user is the same 
      * as the google user
      ****************************************/
-    
+
 }
 
 // define your styles

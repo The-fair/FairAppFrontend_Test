@@ -20,39 +20,6 @@ class App extends Component  {
     isLoading: true
   }
   
-  /*
-  componentDidMount() {
-    return fetch('http://34.86.159.162:3000/api/customers')
-    //return fetch('https://reactnative.dev/movies.json')
-    .then((response) => response.json())
-    .then((responseJson) => {
-      const myCustomer = JSON.stringify(responseJson);
-      console.log(myCustomer);
-      //return responseJson;
-      this.setState({
-        data: myCustomer
-      });
-      return myCustomer;
-    })
-    .catch((error) => {
-      //console.log('failed');
-      console.error(error);
-    })
-  }
-  */
-
-  onPress = () => {
-    this.getCustomerTest();
-    //const customerStr = JSON.stringify(customerInfo);
-    //console.log(customerInfo);
-    //console.log(customerStr);
-/*
-    this.setState({
-      data: customerStr
-    });
-    */
-  }
-
   render() {
     const { data, isLoading } = this.state;
 
@@ -60,7 +27,7 @@ class App extends Component  {
       <View style={styles.container}>
         <TouchableOpacity 
         style={styles.button}
-        onPress={this.onPress}
+        onPress={this.getCustomer}
         >
           <Text>DB Test</Text>
         </TouchableOpacity>
@@ -73,24 +40,17 @@ class App extends Component  {
     )
   }
 
-  getCustomerTest() {
+  getCustomer() {
     return fetch('http://34.86.159.162:3000/api/customers')
-    //return fetch('https://reactnative.dev/movies.json')
     .then((response) => response.json())
     .then((responseJson) => {
-      //console.log(responseJson);
-      //console.log("successful");
       const myCustomer = JSON.stringify(responseJson);
-      //console.log(myCustomerId);
-      //console.log(responseJson);
       this.setState({
         data: myCustomer
       });
       return responseJson;
-      //return myCustomerId;
     })
     .catch((error) => {
-      //console.log('failed');
       console.error(error);
     })
   }

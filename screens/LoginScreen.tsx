@@ -14,7 +14,7 @@ import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 
 // import for text input icon
 import { Icon } from 'react-native-elements';
-import { firebase } from '@react-native-firebase/auth';
+import auth from '@react-native-firebase/auth';
 
 // import for navigation
 import {
@@ -125,11 +125,12 @@ class LoginScreen extends Component<Props> {
 
                     <TouchableOpacity style={styles.signInButton}
                         onPress={
-                            ()=>alert('sign in button pressed')
+                            this.handleLoginButtonOnPress
                         }
                     >
                         <Text style={styles.submissionBtnText}> Login</Text>
                     </TouchableOpacity>
+
                     <TouchableOpacity style={styles.signUpButton}
                         onPress={
                             this.handleSignUpButtonOnPress
@@ -183,6 +184,27 @@ class LoginScreen extends Component<Props> {
     }
 
     /****************************************
+     * Handle the action taken when press the login button
+     ****************************************/
+    handleLoginButtonOnPress = () => {
+        //console.log(this.state.email)
+        //console.log(this.state.password)
+        auth()
+        .signInWithEmailAndPassword(this.state.email, this.state.password)
+        .then(() => {
+            console.log('User account signed in!');
+            this.props.navigation.navigate('HomeScreenTabNavigator', { email:this.state.email});
+        })
+        .catch( error => {
+            if (error.code === 'auth/invalid-email') {
+                console.log('That email address is invalid');
+            }
+
+            console.error(error);
+        })
+    }
+
+    /****************************************
      * Handle the action taken when press the sign uo button
      ****************************************/
     handleSignUpButtonOnPress = () => {
@@ -223,7 +245,7 @@ class LoginScreen extends Component<Props> {
      * check if the firebase user is the same 
      * as the google user
      ****************************************/
-    
+    /*
     isEqualUser = ( googleUser: any, firebaseUser: any) => {
 
         // check if it is firebase
@@ -244,7 +266,7 @@ class LoginScreen extends Component<Props> {
 
         return false;
     };
-    
+    */
 
     /****************************************
      * Sign in function
