@@ -5,6 +5,7 @@ import { TouchableOpacity } from 'react-native';
 import { createSwitchNavigator, createAppContainer, createNavigationContainer } from 'react-navigation';
 import { createStackNavigator } from '@react-navigation/stack';
 
+// import screens from folder
 import LoginScreen from './screens/LoginScreen';
 import LoadingScreen from './screens/LoadingScreen';
 import SignUpScreen from './screens/SignUpScreen';
@@ -14,6 +15,7 @@ import { NavigationContainer } from '@react-navigation/native';
 // enable screen
 import { enableScreens } from 'react-native-screens';
 enableScreens();
+
 /*
 const AppSwitchNavigator = createStackNavigator(
     {
