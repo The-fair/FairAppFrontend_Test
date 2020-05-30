@@ -1,7 +1,6 @@
 //import liraries
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
-import { Button } from 'react-native';
 
 import { GoogleSignin, GoogleSigninButton } from '@react-native-community/google-signin';
 
@@ -22,19 +21,18 @@ import {
     NavigationScreenProp,
     NavigationState
     } from 'react-navigation';
+import { StackActions } from '@react-navigation/native';
 
 // constants
 const BGIMAGE = require('../assests/images/Temp_BG_Image.jpeg');
-const LOGOIMAGE = require('../assests/images/Temp_Logo_Image.jpeg');
+const LOGOIMAGE = require('../assests/images/Fair_Logo_Image.png');
+
 const { width: WIDTH } = Dimensions.get('window');
 
 interface Props {
     navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }
 
-/////////////////////////////////////////////
-// Login screen componenent
-/////////////////////////////////////////////
 class LoginScreen extends Component<Props> {
 
     /****************************************
@@ -48,16 +46,15 @@ class LoginScreen extends Component<Props> {
      * global state of the login screen
      ****************************************/
     state = {
+
         // Regular Login Info
         email: '',
         password: '',
         passwordSecured: true,
-        loginMethod: '',
 
         // Google Login Info
         isLoggedIn: false,
         user: [],
-        //isSigninInProgress: false,
 
     }
 
@@ -70,87 +67,85 @@ class LoginScreen extends Component<Props> {
 
                 <ImageBackground source={BGIMAGE} style={styles.backgroundContrainer}>
                 
-                {/* Logo Container */}
+                    {/* Logo Container */}
 
-                <View style={styles.logoContainer}>
-                    <Image source={LOGOIMAGE} style={styles.logoImage} />
-                    <Text style={styles.logoText}>Faaaaaairrrrrr</Text>
-                </View>
-                
-                {/* Email Container */}
+                    <View style={styles.logoContainer}>
+                        <Image source={LOGOIMAGE} style={styles.logoImage} />
+                        <Text style={styles.logoText}>Faaaaaairrrrrr</Text>
+                    </View>
+                    
+                    {/* Email Container */}
 
-                <View style={styles.emailSectionContainer}>
-                    <Icon type='material-community' name={'email-outline'} size={25} color={'rgba(255, 255, 255, 0.7)'} style={styles.emailTextInputIcon}/>
-                    <TextInput style={styles.emailTextInput}
-                        placeholder={'Email'}
-                        placeholderTextColor={'rgba(255, 255, 255, 0.7)'}
-                        underlineColorAndroid='transparent'
-                        autoCapitalize = 'none'
+                    <View style={styles.emailSectionContainer}>
+                        <Icon type='material-community' name={'email-outline'} size={25} color={'rgba(255, 255, 255, 0.7)'} style={styles.emailTextInputIcon}/>
+                        <TextInput style={styles.emailTextInput}
+                            placeholder={'Email'}
+                            placeholderTextColor={'rgba(255, 255, 255, 0.7)'}
+                            underlineColorAndroid='transparent'
+                            autoCapitalize = 'none'
 
-                        // handler to set the state value on text change
-                        onChangeText = {this.handleEmailTextInput}
-                    />
-                </View>
+                            // handler to set the state value on text change
+                            onChangeText = {this.handleEmailTextInput}
+                        />
+                    </View>
 
-                {/* Password Container */}
+                    {/* Password Container */}
 
-                <View style={styles.passwordSectionContainer}>
-                    <Icon type='material-community' name={'key-outline'} size={25} color={'rgba(255, 255, 255, 0.7)'} style={styles.passwordTextInputIcon}/>
-                    <TextInput style={styles.passwordTextInput}
-                        placeholder={'Password'}
+                    <View style={styles.passwordSectionContainer}>
+                        <Icon type='material-community' name={'key-outline'} size={25} color={'rgba(255, 255, 255, 0.7)'} style={styles.passwordTextInputIcon}/>
+                        <TextInput style={styles.passwordTextInput}
+                            placeholder={'Password'}
 
-                        // the visibility is changed according to state value
-                        secureTextEntry={this.state.passwordSecured}
+                            // the visibility is changed according to state value
+                            secureTextEntry={this.state.passwordSecured}
 
-                        placeholderTextColor={'rgba(255, 255, 255, 0.7)'}
-                        underlineColorAndroid='transparent'
+                            placeholderTextColor={'rgba(255, 255, 255, 0.7)'}
+                            underlineColorAndroid='transparent'
 
-                        // handler to set the state value on text change
-                        onChangeText = {this.handlePasswordTextInput}
-                    />
+                            // handler to set the state value on text change
+                            onChangeText = {this.handlePasswordTextInput}
+                        />
 
-                    <TouchableOpacity style={styles.passwordVisibleBtn}  
-                        // function to call on press 
-                        onPress={() =>{
-                            this.changePasswordVisibility();
-                        }}
-                    >
-                        <Icon type='material-community' name={this.state.passwordSecured == false ? 'eye-outline' : 'eye-off-outline'} size={25} color={'rgba(255, 255, 255, 0.7)'}></Icon>
+                        <TouchableOpacity style={styles.passwordVisibleBtn}  
+                            // function to call on press 
+                            onPress={() =>{
+                                this.changePasswordVisibility();
+                            }}
+                        >
+                            <Icon type='material-community' name={this.state.passwordSecured == false ? 'eye-outline' : 'eye-off-outline'} size={25} color={'rgba(255, 255, 255, 0.7)'}></Icon>
 
-                    </TouchableOpacity>
-                </View>
+                        </TouchableOpacity>
+                    </View>
 
-                {/* Submission Container */}
-                <View style={styles.submissionContainer}>
+                    {/* Submission Container */}
+                    <View style={styles.submissionContainer}>
 
-                    <TouchableOpacity style={styles.signInButton}
-                        onPress={
-                            this.handleLoginButtonOnPress
-                        }
-                    >
-                        <Text style={styles.submissionBtnText}> Login</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity style={styles.signInButton}
+                            onPress={
+                                this.handleLoginButtonOnPress
+                            }
+                        >
+                            <Text style={styles.submissionBtnText}> Login</Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.signUpButton}
-                        onPress={
-                            this.handleSignUpButtonOnPress
-                            //this.firebaseSignUp
-                            //()=>alert('sign up button pressed')
-                            
-                        }
-                    >
-                        <Text style={styles.submissionBtnText}> Sign Up</Text>
-                    </TouchableOpacity>
-                </View>
+                        <TouchableOpacity style={styles.signUpButton}
+                            onPress={
+                                this.handleSignUpButtonOnPress
+                                //this.firebaseSignUp
+                                //()=>alert('sign up button pressed')
+                                
+                            }
+                        >
+                            <Text style={styles.submissionBtnText}> Sign Up</Text>
+                        </TouchableOpacity>
+                    </View>
 
-                {/* Google Signin Container */}
-                <GoogleSigninButton
-                    style={styles.GoogleSigninButton}
-                    size={GoogleSigninButton.Size.Wide}
-                    color={GoogleSigninButton.Color.Dark}
-                    onPress={() => this.googleSignIn}
-                    //onPress={() => this.signInWithGoogleAsync}
-                    //disabled={this.state.isSigninInProgress} 
+                    {/* Google Signin Container */}
+                    <GoogleSigninButton
+                        style={styles.GoogleSigninButton}
+                        size={GoogleSigninButton.Size.Wide}
+                        color={GoogleSigninButton.Color.Dark}
+                        onPress={() => this.googleSignIn}
                     />
                     {/*  Google  */}
                 </ImageBackground>
@@ -186,18 +181,19 @@ class LoginScreen extends Component<Props> {
     /****************************************
      * Handle the action taken when press the login button
      ****************************************/
-    handleLoginButtonOnPress = () => {
-        //console.log(this.state.email)
-        //console.log(this.state.password)
+    handleLoginButtonOnPress = async () => {
+
         auth()
         .signInWithEmailAndPassword(this.state.email, this.state.password)
         .then(() => {
-            console.log('User account signed in!');
-            this.props.navigation.navigate('HomeScreenTabNavigator', { email:this.state.email});
+            console.log('[LoginScreen]: User account signed in!');
+        })
+        .then(() => {
+            //this.props.navigation.navigate('HomeScreenTabNavigator', { email:this.state.email});
         })
         .catch( error => {
             if (error.code === 'auth/invalid-email') {
-                console.log('That email address is invalid');
+                console.log('[LoginScreen]: That email address is invalid');
             }
 
             console.error(error);
@@ -238,112 +234,6 @@ class LoginScreen extends Component<Props> {
             }
         }
     };
-    
-
-
-    /****************************************
-     * check if the firebase user is the same 
-     * as the google user
-     ****************************************/
-    /*
-    isEqualUser = ( googleUser: any, firebaseUser: any) => {
-
-        // check if it is firebase
-        if (firebaseUser) {
-
-            var providerData = firebaseUser.providerData;
-
-            // loop the data
-            for ( var i = 0; i < providerData.length; i++ ){
-                if (
-                    providerData[i].providerId === firebase.auth.GoogleAuthProvider.PROVIDER_ID && providerData[i].uid === googleUser.getBasicProfile().getId()
-                ){
-                    // we dont need to reauth the Firebase connection
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    };
-    */
-
-    /****************************************
-     * Sign in function
-     ****************************************/
-    /*
-    onSignIn = (googleUser: any) => {
-
-        console.log('Google Auth Response', googleUser);
-
-        // register an Observer on Firebase Auth to make sure auth is initialized
-        var unsubscribe = firebase.auth().onAuthStateChanged(
-            (firebaseUser) => {
-                unsubscribe();
-
-                // check if we are already signed-in firebase with the correct user
-                if(!this.isEqualUser(googleUser, firebaseUser)) {
-                    var credential = firebase.auth.GoogleAuthProvider.credential(
-                        googleUser.idToken,
-                        googleUser.accessToken
-                    );
-
-                    // sign in with credential from the google user
-                    firebase.auth()
-                    .signInWithCredential(credential)
-                    .then((result) => {
-                        console.log('User logged in');
-                        if (result.additionalUserInfo?.isNewUser){
-                            console.log('New user');
-                        }
-                        else{
-                            console.log('Old user');
-                        }
-                    })
-                    .catch((error) => {
-                        // handle error here
-                        var errorCode = error.code;
-                        var errorMessage = error.message;
-                        var email = error.email;
-                        var credential = error.credential;
-                    });
-                }
-                else{
-                    console.log('User already signed in Firebase');
-                }
-            }
-        );
-    };
-    */    
-
-    /****************************************
-     * Sign in with async
-     ****************************************/
-    /*
-    signInWithGoogleAsync = async () => {
-        try {
-            //await GoogleSignin.hasPlayServices( { showPlayServicesUpdateDialog: true } );
-            await GoogleSignin.hasPlayServices();
-            this.setState({ isSigninInProgress: true });
-            const userInfo = await GoogleSignin.signIn();
-            this.setState({ user: userInfo.user, isLoggedIn: true });
-            console.log(userInfo);
-        } 
-        catch(e) {
-            return {
-                error: true
-            };
-        }
-    }
-    */
-
-    /****************************************
-     * check if the firebase user is the same 
-     * as the google user
-     ****************************************/
-    
-
-
 }
 
 // define your styles

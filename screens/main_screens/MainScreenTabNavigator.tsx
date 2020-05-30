@@ -9,7 +9,9 @@ import auth from '@react-native-firebase/auth';
 import {
     NavigationParams,
     NavigationScreenProp,
-    NavigationState
+    NavigationState,
+    NavigationActions,
+    StackActions,
     } from 'react-navigation';
 
 interface Props {
@@ -17,14 +19,11 @@ interface Props {
 }
 
 // import for tab bar 
-import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
-import HomeScreen from './home_subscreens/HomeScreen';
-import CalendarScreen from './home_subscreens/CalendarScreen';
-import TempScreen_1 from './home_subscreens/TempScreen_1';
-import TempScreen_2 from './home_subscreens/TempScreen_2';
-import VendorProfileScreen from './home_subscreens/VendorProfileScreen';
+import HomeScreenSectionNavigator from './home_screens/HomeScreenSectionNavigator';
+import ProfileScreen from './profile_screens/ProfileScreen';
+import StoreScreen from './store_screens/StoreScreen';
 
 // import for text input icon
 import { Icon } from 'react-native-elements';
@@ -34,41 +33,55 @@ import { enableScreens } from 'react-native-screens';
 enableScreens();
 
 
-
 const TabBarItem = createBottomTabNavigator();
 
+/*
+const resetAction = StackActions.reset({
+    index: 0,
+    actions: [NavigationActions.navigate({ routeName: 'Home' })]
+})
+*/
+//this.props.navigation.dispatch(resetAction);
+
+
+
 // create a component
-class HomeScreenTabNavigator extends Component {
+class MainScreenTabNavigator extends Component<Props> {
+
+
+    componentDidMount() {
+        //console.log('[MainScreenTabNavigator]: component mounted');
+        //this.props.navigation.
+    }
+
     render() {
         return (
-            //<NavigationContainer>
                 // customized tab bar item
                 <TabBarItem.Navigator 
-                    initialRouteName='HomeScreen'
-                    screenOptions={({ route}) => ({
+                    initialRouteName='Home'
+                    screenOptions={({ route }) => ({
                         tabBarIcon: ({ focused, color, size}) => {
                             let iconName = 'access-point';
                             if (route.name === 'Profile'){
                                 iconName = focused ? 'account'
                                 : 'account-outline';
                             }
-                            else if (route.name === 'Calendar'){
-                                iconName = focused ? 'calendar' : 'calendar-check';
+                            else if (route.name === 'Store'){
+                                iconName = focused ? 'store' : 'store';
                             }
-
+                            else if (route.name === 'Home'){
+                                iconName = focused ? 'home' : 'home';
+                            }
                             return <Icon type='material-community' name={iconName} size={size} color={color} />;
                         },
                     })}
                 >
                     
                     {/* List the navigation stack */}
-                    <TabBarItem.Screen name="HomeScreen" component={HomeScreen} />
-                    <TabBarItem.Screen name="Calendar" component={CalendarScreen} />
-                    <TabBarItem.Screen name="TempScreen_1" component={TempScreen_1} />
-                    <TabBarItem.Screen name="TempScreen_2" component={TempScreen_2} />
-                    <TabBarItem.Screen name="Profile" component={VendorProfileScreen} />
+                    <TabBarItem.Screen name="Home" component={HomeScreenSectionNavigator} />
+                    <TabBarItem.Screen name="Store" component={StoreScreen} />
+                    <TabBarItem.Screen name="Profile" component={ProfileScreen} />
                 </TabBarItem.Navigator>
-            //</NavigationContainer>
         );
     }
 }
@@ -95,4 +108,4 @@ const styles = StyleSheet.create({
 });
 
 //make this component available to the app
-export default HomeScreenTabNavigator;
+export default MainScreenTabNavigator;

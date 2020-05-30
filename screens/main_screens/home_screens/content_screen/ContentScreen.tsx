@@ -3,11 +3,11 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 // create a component
-class TempScreen_1 extends Component {
+class ContentScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text>TempScreen_1</Text>
+                <Text>ContentScreen</Text>
             </View>
         );
     }
@@ -24,4 +24,4 @@ const styles = StyleSheet.create({
 });
 
 //make this component available to the app
-export default TempScreen_1;
+export default ContentScreen;

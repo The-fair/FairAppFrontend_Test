@@ -3,11 +3,11 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 // create a component
-class CalendarScreen extends Component {
+class OrderScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text>CalendarScreen</Text>
+                <Text>OrderScreen</Text>
             </View>
         );
     }
@@ -24,4 +24,4 @@ const styles = StyleSheet.create({
 });
 
 //make this component available to the app
-export default CalendarScreen;
+export default OrderScreen;

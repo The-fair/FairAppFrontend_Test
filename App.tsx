@@ -9,52 +9,54 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from './screens/LoginScreen';
 import LoadingScreen from './screens/LoadingScreen';
 import SignUpScreen from './screens/SignUpScreen';
-import HomeScreenTabNavigator from './screens/HomeScreenTabNavigator';
+import MainScreenTabNavigator from './screens/main_screens/MainScreenTabNavigator';
+
 import { NavigationContainer } from '@react-navigation/native';
 
 // enable screen
 import { enableScreens } from 'react-native-screens';
 enableScreens();
 
-/*
-const AppSwitchNavigator = createStackNavigator(
-    {
-        LoadingScreen:LoadingScreen,
-        LoginScreen:LoginScreen,
-        DashboardScreen:DashboardScreen,
-        SignUpScreen:SignUpScreen,
-        HomeScreenTabNavigator:HomeScreenTabNavigator,
-    },
-
-    {
-        initialRouteName: 'LoadingScreen'
-    }
-);
-
-const AppNavigator = createAppContainer(AppSwitchNavigator);
-*/
+//import NavigationService from './navigationService';
 
 const StackNav = createStackNavigator();
 
-
 // create a component
 class App extends Component {
+    componentDidMount() {
+        //console.log('[App]: component mounted');
+    }
+
     render() {
         return (
-            //<AppNavigator />
+            
             <NavigationContainer>
-                <StackNav.Navigator initialRouteName='LoadingScreen' headerMode='none'>
-                    <StackNav.Screen name='LoadingScreen' component={LoadingScreen} />
-                    <StackNav.Screen name='LoginScreen' component={LoginScreen} />
-                    <StackNav.Screen name='SignUpScreen' component={SignUpScreen} />
-                    <StackNav.Screen name='HomeScreenTabNavigator' component={HomeScreenTabNavigator} />
+                <StackNav.Navigator 
+                    initialRouteName='LoadingScreen' 
+                    headerMode='none' 
+                >
+                    <StackNav.Screen 
+                        name='LoadingScreen' 
+                        component={LoadingScreen} 
+                    />
+                    <StackNav.Screen 
+                        name='LoginScreen'
+                        component={LoginScreen} 
+                    />
+                    <StackNav.Screen 
+                        name='SignUpScreen' 
+                        component={SignUpScreen} 
+                    />
+                    <StackNav.Screen 
+                        name='MainScreenTabNavigator' 
+                        component={MainScreenTabNavigator} 
+                    />
                 </StackNav.Navigator>
             </NavigationContainer>
-
+            
         );
     }
 }
-
 
 // define your styles
 const styles = StyleSheet.create({

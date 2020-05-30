@@ -5,12 +5,12 @@ import { ActivityIndicator } from 'react-native';
 import {
     NavigationParams,
     NavigationScreenProp,
-    NavigationState
+    NavigationState,
+    NavigationActions,
+    StackActions,
     } from 'react-navigation';
 
-//import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 
-import { createStackNavigator } from '@react-navigation/stack';
 import auth from '@react-native-firebase/auth';
 //import firebase from 'firebase';
 
@@ -20,26 +20,46 @@ interface Props {
 
 
 // create a component
-class LoadingScreen extends Component<Props> {
+class LoadingScreen extends Component<Props> {  
+    
+
 
     componentDidMount() {
-        this.checkIfLoggedIn();
+        console.log('[LoadingScreen]: component mounted');
+
+        //this.checkIfLoggedIn();
+        auth().onAuthStateChanged((user) => {
+            console.log("[LoadingScreen]: AUTH STATE CHANGED CALLED");
+            if (user){
+                this.props.navigation.navigate(
+                    'MainScreenTabNavigator', 
+                    {},
+                    NavigationActions.navigate({
+                        routeName:'HomeScreen'
+                    })
+                 );
+            }
+            else{
+                //this.props.navigation.dispatch(StackActions.popToTop());
+                //this.props.navigation.reset
+                this.props.navigation.navigate('LoginScreen');
+            }
+        })
     }
 
     // This function should be used to check the authentication status
-    checkIfLoggedIn = async () => {
-        /*
-        if (true) {
-            //this.navigate('LoginScreen');
-            this.props.navigation.navigate('LoginScreen');
-        }
-        */
-
-       
+    // I think onAuthStateChanged is on all the time
+    checkIfLoggedIn = async () => {       
        auth().onAuthStateChanged((user) => {
-           console.log("AUTH STATE CHANGED CALLED");
+           console.log("[LoadingScreen]: AUTH STATE CHANGED CALLED");
            if (user){
-               this.props.navigation.navigate('HomeScreenTabNavigator', {email: user.email});
+               this.props.navigation.navigate(
+                   'MainScreenTabNavigator', 
+                   {email: user.email},
+                   NavigationActions.navigate({
+                       routeName:'HomeScreen'
+                   })
+                );
            }
            else{
                this.props.navigation.navigate('LoginScreen');
@@ -55,12 +75,6 @@ class LoadingScreen extends Component<Props> {
             </View>
         );
     }
-
-    /****************************************
-     * check if the firebase user is the same 
-     * as the google user
-     ****************************************/
-
 }
 
 // define your styles
