@@ -1,16 +1,13 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
-import { firebase } from '@react-native-firebase/auth';
-
+import { View, Text, StyleSheet } from 'react-native';
 
 // create a component
-class VendorProfileScreen extends Component {
+class StoreScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text>VendorProfileScreen</Text>
-                <Button title="Sign out" onPress={() => firebase.auth().signOut()} />
+                <Text>StoreScreen</Text>
             </View>
         );
     }
@@ -22,8 +19,9 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: '#2c3e50',
     },
 });
 
 //make this component available to the app
-export default VendorProfileScreen;
+export default StoreScreen;
