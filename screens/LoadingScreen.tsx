@@ -21,8 +21,6 @@ interface Props {
 
 // create a component
 class LoadingScreen extends Component<Props> {  
-    
-
 
     componentDidMount() {
         console.log('[LoadingScreen]: component mounted');
@@ -34,15 +32,28 @@ class LoadingScreen extends Component<Props> {
                 this.props.navigation.navigate(
                     'MainScreenTabNavigator', 
                     {},
+                    
+                    /*
                     NavigationActions.navigate({
                         routeName:'HomeScreen'
                     })
+                    */
                  );
             }
             else{
                 //this.props.navigation.dispatch(StackActions.popToTop());
                 //this.props.navigation.reset
                 this.props.navigation.navigate('LoginScreen');
+                //this.props.navigation.
+                /*
+                const resetAction = StackActions.reset({
+                    index: 0,
+                    actions: [NavigationActions.navigate({
+                        routeName: 'LoginScreen'
+                    })],
+                });
+                this.props.navigation.dispatch(resetAction);
+                */
             }
         })
     }

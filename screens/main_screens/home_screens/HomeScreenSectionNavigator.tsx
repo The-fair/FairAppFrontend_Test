@@ -53,7 +53,6 @@ class HomeScreenSectionNavigator extends Component<Props> {
                                 headerShown: false
                             }
                         }
-
                     />
 
                     { /* TO DO: need to revise the usage of constants */}

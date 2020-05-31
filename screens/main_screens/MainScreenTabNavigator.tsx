@@ -61,7 +61,11 @@ class MainScreenTabNavigator extends Component<Props> {
                     initialRouteName='Home'
                     screenOptions={({ route }) => ({
                         tabBarIcon: ({ focused, color, size}) => {
+                            
+                            // default icon name
                             let iconName = 'access-point';
+
+                            // navigate to different screen from tabbar
                             if (route.name === 'Profile'){
                                 iconName = focused ? 'account'
                                 : 'account-outline';
@@ -72,6 +76,7 @@ class MainScreenTabNavigator extends Component<Props> {
                             else if (route.name === 'Home'){
                                 iconName = focused ? 'home' : 'home';
                             }
+
                             return <Icon type='material-community' name={iconName} size={size} color={color} />;
                         },
                     })}

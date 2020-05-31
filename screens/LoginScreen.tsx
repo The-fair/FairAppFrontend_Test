@@ -40,6 +40,7 @@ class LoginScreen extends Component<Props> {
      ****************************************/
     componentDidMount() {
         GoogleSignin.configure();
+        //this.setState({ password: ''});
     }
 
     /****************************************

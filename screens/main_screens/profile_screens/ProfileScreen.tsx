@@ -68,8 +68,12 @@ const styles = StyleSheet.create({
 
     scrollView: {
         //backgroundColor: 'orange',
+        flex: 1,
+        //justifyContent: 'center',
+        //alignItems: 'center',
         marginHorizontal: 20,
-      },
+    },
+    
 });
 
 //make this component available to the app
